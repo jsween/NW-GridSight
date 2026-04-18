@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36518.9 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NW-GridSight", "NW-GridSight\NW-GridSight.csproj", "{D6BA4E7E-C479-40FF-ABE1-E7F3018028A8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D6BA4E7E-C479-40FF-ABE1-E7F3018028A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6BA4E7E-C479-40FF-ABE1-E7F3018028A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6BA4E7E-C479-40FF-ABE1-E7F3018028A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6BA4E7E-C479-40FF-ABE1-E7F3018028A8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3EBF46B8-224D-45BB-990D-46DC2FB8B339}
+	EndGlobalSection
+EndGlobal
