@@ -1,0 +1,32 @@
+﻿@model NW_GridSight.ViewModels.DashboardViewModel
+
+@*
+    ViewData["Title"] = "Dashboard";
+*@
+@{
+}
+
+<h1>NW-GridSight Dashboard</h1>
+<p><strong>Last Updated (UTC):</strong> @Model.LastUpdatedUtc</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Region</th>
+            <th>Source</th>
+            <th>Generation</th>
+            <th>Timestamp</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.PowerSources)
+        {
+            <tr>
+                <td>@item.Region</td>
+                <td>@item.Source</td>
+                <td>@item.GenerationMegaWatts</td>
+                <td>@item.TimeStampUtc</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -21,4 +21,5 @@ wwwroot/lib/
 appsettings.Development.json
 appsettings.Production.json
 appsettings.*.local.json
+appsettings.json
 .env
