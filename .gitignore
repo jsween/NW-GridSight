@@ -362,3 +362,8 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /NW-GridSight/appsettings.json
+
+/NW-GridSight/appsettings.Development.json
+*appsettings.Production.json
+*appsettings.*.local.json
+*appsettings.json

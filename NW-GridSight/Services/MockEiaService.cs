@@ -8,10 +8,10 @@ namespace NW_GridSight.Services
         {
             var mockData = new List<PowerData>
             {
-                new() { Region = "Northwest", Source = "Hydro", GenerationMegaWatts = 5000, TimeStampUtc = DateTime.UtcNow },
-                new() { Region = "Northwest", Source = "Wind", GenerationMegaWatts = 2000, TimeStampUtc = DateTime.UtcNow },
-                new() { Region = "Northwest", Source = "Solar", GenerationMegaWatts = 1500, TimeStampUtc = DateTime.UtcNow },
-                new() { Region = "Northwest", Source = "Natural Gas", GenerationMegaWatts = 3000, TimeStampUtc = DateTime.UtcNow }
+                new() { Region = "Northwest", Source = "Hydro", GenerationMegawatts = 5000, TimestampUtc = DateTime.UtcNow },
+                new() { Region = "Northwest", Source = "Wind", GenerationMegawatts = 2000, TimestampUtc = DateTime.UtcNow },
+                new() { Region = "Northwest", Source = "Solar", GenerationMegawatts = 1500, TimestampUtc = DateTime.UtcNow },
+                new() { Region = "Northwest", Source = "Natural Gas", GenerationMegawatts = 3000, TimestampUtc = DateTime.UtcNow }
             };
             return Task.FromResult(mockData);
         }
