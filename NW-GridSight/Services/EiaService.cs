@@ -46,21 +46,46 @@ namespace NW_GridSight.Services
             {
                 foreach (var item in dataArray.EnumerateArray())
                 {
-                    var valueText = item.GetProperty("value").GetString();
-                    var periodString = item.GetProperty("period").GetString();
+
+                    var region = item.TryGetProperty("respondent-name", out var regionProp)
+                        ? regionProp.GetString() ?? "Unknown"
+                        : "Unknown";
+
+                    var source = item.TryGetProperty("type-name", out var sourceProp)
+                        ? sourceProp.GetString() ?? "Unknown"
+                        : "Unknown";
+
+                    var valueText = item.TryGetProperty("value", out var valueProp)
+                        ? valueProp.GetString()
+                        : null;
+
+                    var generationMegawatts = double.TryParse(
+                        valueText,
+                        System.Globalization.NumberStyles.Any,
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        out var value)
+                            ? value
+                            : 0;
+
+                    var periodString = item.TryGetProperty("period", out var periodProp)
+                        ? periodProp.GetString()
+                        : null;
+
+                    var timestampUtc = DateTime.TryParseExact(
+                        periodString,
+                        "yyyy-MM-dd'T'HH",
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        System.Globalization.DateTimeStyles.AssumeUniversal,
+                        out var timestamp)
+                            ? timestamp
+                            : DateTime.UtcNow;
 
                     var powerData = new PowerData
                     {
-                        Region = item.GetProperty("respondent-name").GetString() ?? "Unknown",
-                        Source = item.GetProperty("type-name").GetString() ?? "Unknown",
-                        GenerationMegawatts = double.TryParse(valueText, out var value) ? value : 0,
-                        TimestampUtc = DateTime.ParseExact(
-                        periodString!,
-                        "yyyy-MM-dd'T'HH",
-                        System.Globalization.CultureInfo.InvariantCulture
-        )
-
-
+                        Region = region,
+                        Source = source,
+                        GenerationMegawatts = generationMegawatts,
+                        TimestampUtc = timestampUtc
                     };
 
                     results.Add(powerData);
