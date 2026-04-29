@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using NW_GridSight.Configuration;
+using NW_GridSight.Extensions;
 using NW_GridSight.Models;
 using System.Text.Json;
 
@@ -59,9 +60,9 @@ namespace NW_GridSight.Services
         public async Task<List<PowerData>> GetCurrentPowerDataAsync()
         {
             DateTime endUtc = DateTime.UtcNow;
-            String end = endUtc.ToString("yyyy-MM-dd'T'HH");
+            String end = endUtc.ToEiaString();
             DateTime startUtc = endUtc.AddHours(-24);
-            String start = startUtc.ToString("yyyy-MM-dd'T'HH");
+            String start = startUtc.ToEiaString();
 
             //var requestUrl = $"{_options.BaseUrl}/current/power?api_key={_options.ApiKey}";
             var requestUrl = $"{_options.BaseUrl}electricity/rto/fuel-type-data/data/?" +
