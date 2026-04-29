@@ -9,6 +9,9 @@ builder.Services.AddControllersWithViews();
 // Register HttpClient for EiaService
 builder.Services.AddHttpClient<IEiaService, EiaService>();
 
+// Register SystemClock as the implementation of IClock
+builder.Services.AddSingleton<IClock, SystemClock>();
+
 // Configure EiaApiOptions
 builder.Services.Configure<EiaApiOptions>(
     builder.Configuration.GetSection("EiaApi"));
