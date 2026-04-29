@@ -36,9 +36,9 @@ namespace NW_GridSight.Mappers
                 periodString,
                 "yyyy-MM-dd'T'HH",
                 CultureInfo.InvariantCulture,
-                DateTimeStyles.AssumeUniversal,
+                DateTimeStyles.None,
                 out var timestamp)
-                    ? timestamp
+                    ? DateTime.SpecifyKind(timestamp, DateTimeKind.Utc)
                     : DateTime.UtcNow;
 
             return new PowerData
