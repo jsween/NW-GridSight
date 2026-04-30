@@ -44,7 +44,7 @@ namespace NW_GridSight.Mappers
             return new PowerData
             {
                 Region = region,
-                Source = source,
+                Source = NormalizeSource(source),
                 GenerationMegawatts = generationMegawatts,
                 TimestampUtc = timestampUtc
             };
@@ -69,6 +69,21 @@ namespace NW_GridSight.Mappers
             }
 
             return results;
+        }
+
+        private static string NormalizeSource(string? source)
+        {
+            if (string.IsNullOrEmpty(source))
+                return "Unknown";
+            return source.Trim().ToLowerInvariant() switch
+            {
+                "hydro" => "Hydro",
+                "batter" => "Battery Storage",
+                "coal" => "Coal",
+                "natural gas" => "Natural Gas",
+                "nuclear" => "Nuclear",
+                _ => CultureInfo.InvariantCulture.TextInfo.ToTitleCase(source.Trim().ToLowerInvariant())
+            };
         }
     }
 }

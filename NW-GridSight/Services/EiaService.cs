@@ -20,11 +20,6 @@ namespace NW_GridSight.Services
 
         public async Task<List<PowerData>> GetCurrentPowerDataAsync()
         {
-            DateTime endUtc = DateTime.UtcNow;
-            String end = endUtc.ToEiaString();
-            DateTime startUtc = endUtc.AddHours(-24);
-            String start = startUtc.ToEiaString();
-
             String? requestUrl = BuildRequestUrl();
 
             _logger.LogInformation("Calling EIA API with URL: {requestUrl}", requestUrl);

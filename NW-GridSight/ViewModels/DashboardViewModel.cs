@@ -4,7 +4,11 @@ namespace NW_GridSight.ViewModels
 {
     public class DashboardViewModel
     {
-        public List<PowerData> PowerSources { get; set; } = new();
+        public List<PowerData> PowerSources { get; set; } = [];
         public DateTime LastUpdatedUtc { get; set; } = DateTime.UtcNow;
+        public List<PowerSourceSummary> PowerSourceSummaries { get; set; } = [];
+        public int TotalGenerationMegawatts { get; set; }
+        public int HydroPercentage { get; set; }
+        public string? TopSource { get; set; }
     }
 }
