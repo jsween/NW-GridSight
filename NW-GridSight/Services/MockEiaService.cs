@@ -15,7 +15,7 @@ namespace NW_GridSight.Services
                 data.Add(new PowerData
                 {
                     Source = "Hydro",
-                    Region = "BPA",
+                    Region = "PacifiCorp West",
                     GenerationMegawatts = 1000 + i * 10,
                     TimestampUtc = now.AddHours(-i)
                 });
@@ -23,7 +23,15 @@ namespace NW_GridSight.Services
                 data.Add(new PowerData
                 {
                     Source = "Wind",
-                    Region = "BPA",
+                    Region = "Avista Corporation",
+                    GenerationMegawatts = 500 + i * 5,
+                    TimestampUtc = now.AddHours(-i)
+                });
+
+                data.Add(new PowerData
+                {
+                    Source = "Coal",
+                    Region = "Portland General Electric Company",
                     GenerationMegawatts = 500 + i * 5,
                     TimestampUtc = now.AddHours(-i)
                 });

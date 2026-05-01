@@ -11,4 +11,9 @@
     <Folder Include="Data\" />
   </ItemGroup>
 
+	<ItemGroup>
+		<!-- Add this -->
+		<InternalsVisibleTo Include="NW_GridSight.Tests" />
+	</ItemGroup>
+
 </Project>
