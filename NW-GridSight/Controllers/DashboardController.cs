@@ -29,10 +29,12 @@ namespace NW_GridSight.Controllers
                 "Other"
             };
 
-            List<PowerData> powerData = await _eiaService.GetCurrentPowerDataAsync();
+            List<PowerData> powerData = await _eiaService.GetPowerDataSnapshot();
 
             List<PowerData> filteredData = [.. powerData
                 .Where(x => pnwRegions.Contains(x.Region))];
+
+            var historicalData = await _eiaService.GetLast24HoursDataAsync();
 
             List<PowerSourceSummary> summaries = [.. filteredData
                 .GroupBy(x => x.Source)
@@ -55,7 +57,9 @@ namespace NW_GridSight.Controllers
             var vm = new DashboardViewModel
             {
 
-                PowerSources = filteredData,
+                LatestSnapshot = filteredData,
+                HistoricalData = historicalData,
+
                 PowerSourceSummaries = summaries,
                 TotalGenerationMegawatts = filteredData.Sum(x => (int)x.GenerationMegawatts),
                 LastUpdatedUtc = DateTime.UtcNow,

@@ -18,30 +18,36 @@ namespace NW_GridSight.Services
         private readonly ILogger<EiaService> _logger = logger;
         private readonly IClock _clock = clock;
 
-        public async Task<List<PowerData>> GetCurrentPowerDataAsync()
+        public async Task<List<PowerData>> GetPowerDataSnapshot()
         {
-            String? requestUrl = BuildRequestUrl();
+            var data = await GetLast24HoursDataAsync();
 
-            _logger.LogInformation("Calling EIA API with URL: {requestUrl}", requestUrl);
+            return [.. data
+                .GroupBy(x => x.Source)
+                .Select(g => g.OrderByDescending(x => x.TimestampUtc).First())];
+        }
+
+        public async Task<List<PowerData>> GetLast24HoursDataAsync()
+        {
+            DateTime startUtc = _clock.UtcNow.AddHours(-24);
+            DateTime endUtc = _clock.UtcNow;
+
+            string? requestUrl = BuildRequestUrl(startUtc, endUtc);
 
             var response = await _httpClient.GetAsync(requestUrl);
-
-            String? json = await response.Content.ReadAsStringAsync();
+            string? json = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
             {
-                _logger.LogWarning("EIA API returned a status code: {StatusCode}\nBody: {body}", response.StatusCode, json);
+                _logger.LogWarning("EIA API returned a sattus code {StatusCode}\nBody: {body}", response.StatusCode, json);
                 throw new Exception($"EIA API request failed with status code: {response.StatusCode}");
             }
 
             return EiaPowerDataMapper.MapResponse(json);
         }
 
-        internal string BuildRequestUrl()
+        internal string BuildRequestUrl(DateTime startUtc, DateTime endUtc)
         {
-            DateTime endUtc = _clock.UtcNow;
-            DateTime startUtc = endUtc.AddHours(-24);
-
             string start = startUtc.ToEiaString();
             string end = endUtc.ToEiaString();
 
@@ -58,7 +64,7 @@ namespace NW_GridSight.Services
                 $"&start={start}" +
                 $"&end={end}" +
                 $"&offset=0" +
-                $"&length=25";
+                $"&length=5000";
         }
     }
 }
