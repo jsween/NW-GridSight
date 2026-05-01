@@ -1,4 +1,5 @@
 ﻿using NW_GridSight.Mappers;
+using System.Text.Json;
 
 namespace NW_GridSight.Tests.Mappers
 {
@@ -45,6 +46,124 @@ namespace NW_GridSight.Tests.Mappers
             var results = EiaPowerDataMapper.MapResponse(json);
 
             Assert.Empty(results);
+        }
+
+        [Fact]
+        public void MapResponse_ReturnsEmptyList_WhenResponseIsMissing()
+        {
+            var json = "{}";
+
+            var results = EiaPowerDataMapper.MapResponse(json);
+
+            Assert.Empty(results);
+        }
+
+        [Fact]
+        public void MapResponse_HandlesMultipleRecords()
+        {
+            var json = """
+            {
+              "response": {
+                "data": [
+                  {
+                    "period": "2026-04-28T06",
+                    "respondent-name": "Avista Corporation",
+                    "type-name": "Natural Gas",
+                    "value": "500"
+                  },
+                  {
+                    "period": "2026-04-28T07",
+                    "respondent-name": "Portland General Electric Company",
+                    "type-name": "Solar",
+                    "value": "250"
+                  }
+                ]
+              }
+            }
+            """;
+
+            var results = EiaPowerDataMapper.MapResponse(json);
+
+            Assert.Equal(2, results.Count);
+            Assert.Equal("Avista Corporation", results[0].Region);
+            Assert.Equal("Natural Gas", results[0].Source);
+            Assert.Equal("Portland General Electric Company", results[1].Region);
+            Assert.Equal("Solar", results[1].Source);
+            Assert.Equal(250, results[1].GenerationMegawatts);
+        }
+
+        [Theory]
+        [InlineData("hydro", "Hydro")]
+        [InlineData("natural gas", "Natural Gas")]
+        [InlineData("coal", "Coal")]
+        [InlineData("nuclear", "Nuclear")]
+        [InlineData("wind", "Wind")]
+        [InlineData("batter", "Battery Storage")]
+        public void MapToPowerData_NormalizesSourceNames(string input, string expected)
+        {
+            var json = $$"""
+            {
+              "period": "2026-04-28T06",
+              "respondent-name": "Test Region",
+              "type-name": "{{input}}",
+              "value": "100"
+            }
+            """;
+
+            using var doc = JsonDocument.Parse(json);
+            var result = EiaPowerDataMapper.MapToPowerData(doc.RootElement);
+
+            Assert.Equal(expected, result.Source);
+        }
+
+        [Fact]
+        public void MapToPowerData_HandlesInvalidValue_ReturnsZero()
+        {
+            var json = """
+            {
+              "period": "2026-04-28T06",
+              "respondent-name": "Test Region",
+              "type-name": "Hydro",
+              "value": "invalid"
+            }
+            """;
+
+            using var doc = JsonDocument.Parse(json);
+            var result = EiaPowerDataMapper.MapToPowerData(doc.RootElement);
+
+            Assert.Equal(0, result.GenerationMegawatts);
+        }
+
+        [Fact]
+        public void MapToPowerData_HandlesMissingProperties()
+        {
+            var json = "{}";
+
+            using var doc = JsonDocument.Parse(json);
+            var result = EiaPowerDataMapper.MapToPowerData(doc.RootElement);
+
+            Assert.Equal("Unknown", result.Region);
+            Assert.Equal("Unknown", result.Source);
+            Assert.Equal(0, result.GenerationMegawatts);
+        }
+
+        [Fact]
+        public void MapToPowerData_HandlesInvalidDateFormat()
+        {
+            var json = """
+            {
+              "period": "invalid-date",
+              "respondent-name": "Test Region",
+              "type-name": "Hydro",
+              "value": "100"
+            }
+            """;
+
+            using var doc = JsonDocument.Parse(json);
+            var result = EiaPowerDataMapper.MapToPowerData(doc.RootElement);
+
+            // Should default to UtcNow when parsing fails
+            Assert.Equal(DateTimeKind.Utc, result.TimestampUtc.Kind);
         }
     }
 }
