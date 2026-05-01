@@ -1,32 +1,118 @@
 ﻿@model NW_GridSight.ViewModels.DashboardViewModel
 
-@*
-    ViewData["Title"] = "Dashboard";
-*@
 @{
+    ViewData["Title"] = "Dashboard";
 }
 
 <h1>NW-GridSight Dashboard</h1>
-<p><strong>Last Updated (UTC):</strong> @Model.LastUpdatedUtc</p>
+<p><strong>Last Updated:</strong> @Model.LastUpdatedUtc.ToString("yyyy-MM-dd HH:mm") UTC</p>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Region</th>
-            <th>Source</th>
-            <th>Generation</th>
-            <th>Timestamp</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.PowerSources)
-        {
-            <tr>
-                <td>@item.Region</td>
-                <td>@item.Source</td>
-                <td>@item.GenerationMegaWatts</td>
-                <td>@item.TimeStampUtc</td>
-            </tr>
+<h2>Pacific Northwest Generation Summary</h2>
+<p>Hydro accounts for @Model.HydroPercentage% of total generation.</p>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card p-3">
+            <h5>Total Generation</h5>
+            <h3>@Model.TotalGenerationMegawatts MW</h3>
+        </div>
+    </div>
+
+    @foreach (var item in Model.PowerSourceSummaries)
+    {
+        var isTopSource = item.PowerSource == Model.TopSource;
+
+        <div class="col-md-3 mb-3">
+            <div class="card p-3 @(isTopSource ? "border-primary shadow" : "")">
+                <h5>@item.PowerSource</h5>
+                <h3>@item.GenerationMegawatts MW</h3>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="card mt-4">
+    <div class="card-header">
+        24-Hour Generation Trend
+    </div>
+    <div class="card-body">
+        <canvas id="generationChart"></canvas>
+    </div>
+</div>
+<p class="text-muted small">
+    Note: Negative battery storage values may indicate charging (load) rather than generation.
+</p>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const historicalData = @Html.Raw(Json.Serialize(Model.HistoricalData));
+
+    console.log("Historical data:", historicalData);
+    console.log("Count:", historicalData.length);
+
+        function formatTime(timestamp) {
+        return new Date(timestamp).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
+    historicalData.sort((a, b) =>
+        new Date(a.timestampUtc) - new Date(b.timestampUtc)
+    );
+
+    const includedSources = ["Hydro", "Natural Gas", "Battery Storage"];
+
+    const chartData = historicalData
+        .filter(item => includedSources.includes(item.source))
+        .sort((a, b) => new Date(a.timestampUtc) - new Date(b.timestampUtc));
+
+    const labels = [...new Set(
+        chartData.map(item => formatTime(item.timestampUtc))
+    )];
+
+    const sources = [...new Set(
+        chartData.map(item => item.source)
+    )];
+
+    const datasets = sources.map(source => ({
+        label: source,
+        data: labels.map(label => {
+            const match = chartData.find(item =>
+                item.source === source &&
+                formatTime(item.timestampUtc) === label
+            );
+
+            return match ? match.generationMegawatts : null;
+        }),
+        tension: 0.3
+    }));
+
+    const ctx = document.getElementById('generationChart');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Time UTC'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Generation MW'
+                    }
+                }
+            }
         }
-    </tbody>
-</table>
+    });
+</script>

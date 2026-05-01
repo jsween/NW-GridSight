@@ -1,10 +1,20 @@
+using NW_GridSight.Configuration;
 using NW_GridSight.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IEiaService, MockEiaService>();
+
+// Register HttpClient for EiaService
+builder.Services.AddHttpClient<IEiaService, EiaService>();
+
+// Register SystemClock as the implementation of IClock
+builder.Services.AddSingleton<IClock, SystemClock>();
+
+// Configure EiaApiOptions
+builder.Services.Configure<EiaApiOptions>(
+    builder.Configuration.GetSection("EiaApi"));
 
 var app = builder.Build();
 

@@ -4,6 +4,8 @@ namespace NW_GridSight.Services
 {
     public interface IEiaService
     {
-        Task<List<PowerData>> GetCurrentPowerDataAsync();
+        Task<List<PowerData>> GetPowerDataSnapshot();
+
+        Task<List<PowerData>> GetLast24HoursDataAsync();
     }
 }
