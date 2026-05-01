@@ -8,8 +8,6 @@ builder.Services.AddControllersWithViews();
 
 // Register HttpClient for EiaService
 builder.Services.AddHttpClient<IEiaService, EiaService>();
-
-// Register SystemClock as the implementation of IClock
 builder.Services.AddSingleton<IClock, SystemClock>();
 
 // Configure EiaApiOptions
@@ -22,7 +20,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -38,3 +35,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+// Make the Program class accessible to tests
+public partial class Program { }

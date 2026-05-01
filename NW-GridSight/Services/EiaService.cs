@@ -40,7 +40,10 @@ namespace NW_GridSight.Services
             if (!response.IsSuccessStatusCode)
             {
                 _logger.LogWarning("EIA API returned a sattus code {StatusCode}\nBody: {body}", response.StatusCode, json);
-                throw new Exception($"EIA API request failed with status code: {response.StatusCode}");
+                throw new HttpRequestException(
+                    $"EIA API request failed with status code: {response.StatusCode}",
+                    null,
+                    response.StatusCode);
             }
 
             return EiaPowerDataMapper.MapResponse(json);
