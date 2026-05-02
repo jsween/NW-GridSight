@@ -7,6 +7,58 @@
 <h1>NW-GridSight Dashboard</h1>
 <p><strong>Last Updated:</strong> @Model.LastUpdatedUtc.ToString("yyyy-MM-dd HH:mm") UTC</p>
 
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card p-3">
+            <h6>Total Generation</h6>
+            <h3>@Model.TotalGenerationMegawatts MW</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3">
+            <h6>Hydro Share</h6>
+            <h3>@Model.HydroPercentage%</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3">
+            <h6>Top Source</h6>
+            <h3>@Model.TopSource</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3">
+            <h6>Last Updated</h6>
+            <h3>@Model.LastUpdatedUtc.ToString("HH:mm") UTC</h3>
+        </div>
+    </div>
+</div>
+
+<h4>Generation by Source</h4>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Source</th>
+            <th>Total MW</th>
+            <th>Share</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var source in Model.PowerSourceSummaries)
+        {
+            <tr>
+                <td>@source.PowerSource</td>
+                <td>@source.GenerationMegawatts</td>
+                <td>@source.Percentage%</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
 <h2>Pacific Northwest Generation Summary</h2>
 <p>Hydro accounts for @Model.HydroPercentage% of total generation.</p>
 
