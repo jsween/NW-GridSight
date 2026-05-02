@@ -52,7 +52,9 @@ namespace NW_GridSight.Controllers
             var hydro = summaries.FirstOrDefault(x => x.PowerSource.Equals("Hydro", StringComparison.OrdinalIgnoreCase))?.GenerationMegawatts ?? 0;
 
             var totalGeneration = filteredData.Sum(x => (int)x.GenerationMegawatts);
-            var hydroPercent = (int)((double)hydro / totalGeneration * 100);
+            var hydroPercent = totalGeneration > 0
+                ? (int)((double)hydro / totalGeneration * 100)
+                : 0;
 
             var vm = new DashboardViewModel
             {
