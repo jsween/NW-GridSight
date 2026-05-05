@@ -58,7 +58,15 @@ namespace NW_GridSight.Tests.Integration
             {
                 Assert.NotEmpty(item.Region);
                 Assert.NotEmpty(item.Source);
-                Assert.True(item.GenerationMegawatts >= 0);
+                // Battery storage can have negative values when charging
+                if (item.Source.Equals("Battery Storage", StringComparison.OrdinalIgnoreCase))
+                {
+                    Assert.True(item.GenerationMegawatts != 0); // Can be positive or negative, just not zero
+                }
+                else
+                {
+                    Assert.True(item.GenerationMegawatts >= 0);
+                }
             });
         }
 

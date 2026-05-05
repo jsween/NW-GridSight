@@ -10,6 +10,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient<IEiaService, EiaService>();
 builder.Services.AddSingleton<IClock, SystemClock>();
 
+// Register DashboardService
+builder.Services.AddScoped<IDashboardService, DashboardService>();
+
 // Configure EiaApiOptions
 builder.Services.Configure<EiaApiOptions>(
     builder.Configuration.GetSection("EiaApi"));

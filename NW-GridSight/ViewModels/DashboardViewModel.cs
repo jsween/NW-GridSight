@@ -6,7 +6,7 @@ namespace NW_GridSight.ViewModels
     {
         public List<PowerData> LatestSnapshot { get; set; } = [];
         public List<PowerData> HistoricalData { get; set; } = [];
-        public DateTime LastUpdatedUtc { get; set; } = DateTime.UtcNow;
+        public DateTime LastUpdatedUtc { get; set; }
 
         public List<PowerSourceSummary> PowerSourceSummaries { get; set; } = [];
 

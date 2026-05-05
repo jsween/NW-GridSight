@@ -1,11 +1,15 @@
 ﻿@model NW_GridSight.ViewModels.DashboardViewModel
+@using System.Text.Json
 
 @{
     ViewData["Title"] = "Dashboard";
+    var jsonOptions = new JsonSerializerOptions
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
 }
 
 <h1>NW-GridSight Dashboard</h1>
-<p><strong>Last Updated:</strong> @Model.LastUpdatedUtc.ToString("yyyy-MM-dd HH:mm") UTC</p>
 
 <div class="row mb-4">
     <div class="col-md-3">
@@ -97,12 +101,12 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const historicalData = @Html.Raw(Json.Serialize(Model.HistoricalData));
+    const historicalData = @Html.Raw(JsonSerializer.Serialize(Model.HistoricalData, jsonOptions));
 
     console.log("Historical data:", historicalData);
     console.log("Count:", historicalData.length);
 
-        function formatTime(timestamp) {
+    function formatTime(timestamp) {
         return new Date(timestamp).toLocaleTimeString([], {
             hour: '2-digit',
             minute: '2-digit'
