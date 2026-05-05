@@ -35,13 +35,24 @@ namespace NW_GridSight.Controllers
                 .Where(x => pnwRegions.Contains(x.Region))];
 
             var historicalData = await _eiaService.GetLast24HoursDataAsync();
+            var totalGeneration = filteredData.Sum(x => (int)x.GenerationMegawatts);
 
             List<PowerSourceSummary> summaries = [.. filteredData
                 .GroupBy(x => x.Source)
-                .Select(g => new PowerSourceSummary
+                .Select(g =>
                 {
-                    PowerSource = g.Key,
-                    GenerationMegawatts = g.Sum(x => (int)x.GenerationMegawatts)
+                    var sourceTotal = g.Sum(x => x.GenerationMegawatts);
+
+                    var percentage = totalGeneration > 0
+                        ? (int)Math.Round((double)sourceTotal / totalGeneration * 100)
+                        : 0;
+
+                    return new PowerSourceSummary
+                    {
+                        PowerSource = g.Key,
+                        GenerationMegawatts = (int)sourceTotal,
+                        Percentage = percentage
+                    };
                 })
                 .OrderByDescending(x => x.GenerationMegawatts)];
 
@@ -51,8 +62,9 @@ namespace NW_GridSight.Controllers
 
             var hydro = summaries.FirstOrDefault(x => x.PowerSource.Equals("Hydro", StringComparison.OrdinalIgnoreCase))?.GenerationMegawatts ?? 0;
 
-            var totalGeneration = filteredData.Sum(x => (int)x.GenerationMegawatts);
-            var hydroPercent = (int)((double)hydro / totalGeneration * 100);
+            var hydroPercent = totalGeneration > 0
+                ? (int)((double)hydro / totalGeneration * 100)
+                : 0;
 
             var vm = new DashboardViewModel
             {
