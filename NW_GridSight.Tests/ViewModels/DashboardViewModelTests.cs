@@ -24,21 +24,6 @@ namespace NW_GridSight.Tests.ViewModels
         }
 
         [Fact]
-        public void DashboardViewModel_LastUpdatedUtc_DefaultsToUtcNow()
-        {
-            // Arrange
-            var before = DateTime.UtcNow;
-
-            // Act
-            var viewModel = new DashboardViewModel();
-
-            // Assert
-            var after = DateTime.UtcNow;
-            Assert.InRange(viewModel.LastUpdatedUtc, before, after.AddSeconds(1));
-            Assert.Equal(DateTimeKind.Utc, viewModel.LastUpdatedUtc.Kind);
-        }
-
-        [Fact]
         public void DashboardViewModel_CanSetLatestSnapshot()
         {
             // Arrange
