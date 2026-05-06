@@ -23,13 +23,13 @@ namespace NW_GridSight.Tests.Services
             // Arrange
             var snapshot = new List<PowerData>
             {
-                new() { Region = "Test Region", Source = "Hydro", GenerationMegawatts = 600, TimestampUtc = DateTime.UtcNow },
-                new() { Region = "Test Region", Source = "Wind", GenerationMegawatts = 300, TimestampUtc = DateTime.UtcNow },
-                new() { Region = "Test Region", Source = "Solar", GenerationMegawatts = 100, TimestampUtc = DateTime.UtcNow }
+                new() { Region = "Avista Corporation", Source = "Hydro", GenerationMegawatts = 600, TimestampUtc = DateTime.UtcNow },
+                new() { Region = "PacifiCorp West", Source = "Wind", GenerationMegawatts = 300, TimestampUtc = DateTime.UtcNow },
+                new() { Region = "Portland General Electric Company", Source = "Solar", GenerationMegawatts = 100, TimestampUtc = DateTime.UtcNow }
             };
 
             // Act
-            var result = _service.BuildDashboard(snapshot, new List<PowerData>());
+            var result = _service.BuildDashboard(snapshot, []);
 
             // Assert
             var hydroSummary = result.PowerSourceSummaries.First(s => s.PowerSource == "Hydro");
@@ -47,13 +47,13 @@ namespace NW_GridSight.Tests.Services
             // Arrange
             var snapshot = new List<PowerData>
             {
-                new() { Region = "Test Region", Source = "Hydro", GenerationMegawatts = 500, TimestampUtc = DateTime.UtcNow },
-                new() { Region = "Test Region", Source = "Wind", GenerationMegawatts = 300, TimestampUtc = DateTime.UtcNow },
-                new() { Region = "Test Region", Source = "Solar", GenerationMegawatts = 200, TimestampUtc = DateTime.UtcNow }
+                new() { Region = "Avista Corporation", Source = "Hydro", GenerationMegawatts = 500, TimestampUtc = DateTime.UtcNow },
+                new() { Region = "PacifiCorp West", Source = "Wind", GenerationMegawatts = 300, TimestampUtc = DateTime.UtcNow },
+                new() { Region = "Portland General Electric Company", Source = "Solar", GenerationMegawatts = 200, TimestampUtc = DateTime.UtcNow }
             };
 
             // Act
-            var result = _service.BuildDashboard(snapshot, new List<PowerData>());
+            var result = _service.BuildDashboard(snapshot, []);
 
             // Assert
             var totalPercentage = result.PowerSourceSummaries.Sum(s => s.Percentage);
@@ -67,7 +67,7 @@ namespace NW_GridSight.Tests.Services
             var emptySnapshot = new List<PowerData>();
 
             // Act
-            var result = _service.BuildDashboard(emptySnapshot, new List<PowerData>());
+            var result = _service.BuildDashboard(emptySnapshot, []);
 
             // Assert
             Assert.Empty(result.PowerSourceSummaries);
@@ -79,11 +79,11 @@ namespace NW_GridSight.Tests.Services
             // Arrange
             var snapshot = new List<PowerData>
             {
-                new() { Region = "Test Region", Source = "Hydro", GenerationMegawatts = 0, TimestampUtc = DateTime.UtcNow }
+                new() { Region = "Avista Corporation", Source = "Hydro", GenerationMegawatts = 0, TimestampUtc = DateTime.UtcNow }
             };
 
             // Act
-            var result = _service.BuildDashboard(snapshot, new List<PowerData>());
+            var result = _service.BuildDashboard(snapshot, []);
 
             // Assert
             var hydroSummary = result.PowerSourceSummaries.First(s => s.PowerSource == "Hydro");
@@ -96,12 +96,12 @@ namespace NW_GridSight.Tests.Services
             // Arrange - 501/1000 = 50.1% should round down to 50
             var snapshot = new List<PowerData>
             {
-                new() { Region = "Test Region", Source = "Hydro", GenerationMegawatts = 501, TimestampUtc = DateTime.UtcNow },
-                new() { Region = "Test Region", Source = "Wind", GenerationMegawatts = 499, TimestampUtc = DateTime.UtcNow }
+                new() { Region = "Avista Corporation", Source = "Hydro", GenerationMegawatts = 501, TimestampUtc = DateTime.UtcNow },
+                new() { Region = "PacifiCorp West", Source = "Wind", GenerationMegawatts = 499, TimestampUtc = DateTime.UtcNow }
             };
 
             // Act
-            var result = _service.BuildDashboard(snapshot, new List<PowerData>());
+            var result = _service.BuildDashboard(snapshot, []);
 
             // Assert
             var hydroSummary = result.PowerSourceSummaries.First(s => s.PowerSource == "Hydro");
@@ -114,11 +114,11 @@ namespace NW_GridSight.Tests.Services
             // Arrange
             var snapshot = new List<PowerData>
             {
-                new() { Region = "Test Region", Source = "Hydro", GenerationMegawatts = 1000, TimestampUtc = DateTime.UtcNow }
+                new() { Region = "Avista Corporation", Source = "Hydro", GenerationMegawatts = 1000, TimestampUtc = DateTime.UtcNow }
             };
 
             // Act
-            var result = _service.BuildDashboard(snapshot, new List<PowerData>());
+            var result = _service.BuildDashboard(snapshot, []);
 
             // Assert
             var hydroSummary = result.PowerSourceSummaries.First(s => s.PowerSource == "Hydro");
@@ -141,7 +141,7 @@ namespace NW_GridSight.Tests.Services
             };
 
             // Act
-            var result = _service.BuildDashboard(snapshot, new List<PowerData>());
+            var result = _service.BuildDashboard(snapshot, []);
 
             // Assert
             Assert.Equal(2, result.LatestSnapshot.Count);
@@ -160,7 +160,7 @@ namespace NW_GridSight.Tests.Services
             };
 
             // Act
-            var result = _service.BuildDashboard(snapshot, new List<PowerData>());
+            var result = _service.BuildDashboard(snapshot, []);
 
             // Assert
             Assert.Equal(3, result.LatestSnapshot.Count);
@@ -179,13 +179,13 @@ namespace NW_GridSight.Tests.Services
             // Arrange
             var snapshot = new List<PowerData>
             {
-                new() { Region = "Region A", Source = "Hydro", GenerationMegawatts = 500, TimestampUtc = DateTime.UtcNow },
-                new() { Region = "Region B", Source = "Hydro", GenerationMegawatts = 300, TimestampUtc = DateTime.UtcNow },
-                new() { Region = "Region C", Source = "Wind", GenerationMegawatts = 200, TimestampUtc = DateTime.UtcNow }
+                new() { Region = "Avista Corporation", Source = "Hydro", GenerationMegawatts = 500, TimestampUtc = DateTime.UtcNow },
+                new() { Region = "PacifiCorp West", Source = "Hydro", GenerationMegawatts = 300, TimestampUtc = DateTime.UtcNow },
+                new() { Region = "Portland General Electric Company", Source = "Wind", GenerationMegawatts = 200, TimestampUtc = DateTime.UtcNow }
             };
 
             // Act
-            var result = _service.BuildDashboard(snapshot, new List<PowerData>());
+            var result = _service.BuildDashboard(snapshot, []);
 
             // Assert
             Assert.Equal(2, result.PowerSourceSummaries.Count);
@@ -199,13 +199,13 @@ namespace NW_GridSight.Tests.Services
             // Arrange
             var snapshot = new List<PowerData>
             {
-                new() { Region = "Test", Source = "Wind", GenerationMegawatts = 200, TimestampUtc = DateTime.UtcNow },
-                new() { Region = "Test", Source = "Hydro", GenerationMegawatts = 800, TimestampUtc = DateTime.UtcNow },
-                new() { Region = "Test", Source = "Solar", GenerationMegawatts = 500, TimestampUtc = DateTime.UtcNow }
+                new() { Region = "Avista Corporation", Source = "Wind", GenerationMegawatts = 200, TimestampUtc = DateTime.UtcNow },
+                new() { Region = "Avista Corporation", Source = "Hydro", GenerationMegawatts = 800, TimestampUtc = DateTime.UtcNow },
+                new() { Region = "Avista Corporation", Source = "Solar", GenerationMegawatts = 500, TimestampUtc = DateTime.UtcNow }
             };
 
             // Act
-            var result = _service.BuildDashboard(snapshot, new List<PowerData>());
+            var result = _service.BuildDashboard(snapshot, []);
 
             // Assert
             Assert.Equal(3, result.PowerSourceSummaries.Count);
@@ -224,12 +224,12 @@ namespace NW_GridSight.Tests.Services
             // Arrange
             var snapshot = new List<PowerData>
             {
-                new() { Region = "Test", Source = "Hydro", GenerationMegawatts = 500, TimestampUtc = DateTime.UtcNow },
-                new() { Region = "Test", Source = "Wind", GenerationMegawatts = 300, TimestampUtc = DateTime.UtcNow }
+                new() { Region = "Avista Corporation", Source = "Hydro", GenerationMegawatts = 500, TimestampUtc = DateTime.UtcNow },
+                new() { Region = "Avista Corporation", Source = "Wind", GenerationMegawatts = 300, TimestampUtc = DateTime.UtcNow }
             };
 
             // Act
-            var result = _service.BuildDashboard(snapshot, new List<PowerData>());
+            var result = _service.BuildDashboard(snapshot, []);
 
             // Assert
             Assert.Equal(800, result.TotalGenerationMegawatts);
@@ -242,7 +242,7 @@ namespace NW_GridSight.Tests.Services
             var emptySnapshot = new List<PowerData>();
 
             // Act
-            var result = _service.BuildDashboard(emptySnapshot, new List<PowerData>());
+            var result = _service.BuildDashboard(emptySnapshot, []);
 
             // Assert
             Assert.Equal(0, result.TotalGenerationMegawatts);
@@ -258,12 +258,12 @@ namespace NW_GridSight.Tests.Services
             // Arrange
             var snapshot = new List<PowerData>
             {
-                new() { Region = "Test", Source = "Hydro", GenerationMegawatts = 600, TimestampUtc = DateTime.UtcNow },
-                new() { Region = "Test", Source = "Wind", GenerationMegawatts = 400, TimestampUtc = DateTime.UtcNow }
+                new() { Region = "Avista Corporation", Source = "Hydro", GenerationMegawatts = 600, TimestampUtc = DateTime.UtcNow },
+                new() { Region = "Avista Corporation", Source = "Wind", GenerationMegawatts = 400, TimestampUtc = DateTime.UtcNow }
             };
 
             // Act
-            var result = _service.BuildDashboard(snapshot, new List<PowerData>());
+            var result = _service.BuildDashboard(snapshot, []);
 
             // Assert
             Assert.Equal(60, result.HydroPercentage);
@@ -275,12 +275,12 @@ namespace NW_GridSight.Tests.Services
             // Arrange
             var snapshot = new List<PowerData>
             {
-                new() { Region = "Test", Source = "Wind", GenerationMegawatts = 500, TimestampUtc = DateTime.UtcNow },
-                new() { Region = "Test", Source = "Solar", GenerationMegawatts = 300, TimestampUtc = DateTime.UtcNow }
+                new() { Region = "Avista Corporation", Source = "Wind", GenerationMegawatts = 500, TimestampUtc = DateTime.UtcNow },
+                new() { Region = "Avista Corporation", Source = "Solar", GenerationMegawatts = 300, TimestampUtc = DateTime.UtcNow }
             };
 
             // Act
-            var result = _service.BuildDashboard(snapshot, new List<PowerData>());
+            var result = _service.BuildDashboard(snapshot, []);
 
             // Assert
             Assert.Equal(0, result.HydroPercentage);
@@ -296,12 +296,12 @@ namespace NW_GridSight.Tests.Services
             // Arrange
             var snapshot = new List<PowerData>
             {
-                new() { Region = "Test", Source = "Hydro", GenerationMegawatts = 800, TimestampUtc = DateTime.UtcNow },
-                new() { Region = "Test", Source = "Wind", GenerationMegawatts = 200, TimestampUtc = DateTime.UtcNow }
+                new() { Region = "Avista Corporation", Source = "Hydro", GenerationMegawatts = 800, TimestampUtc = DateTime.UtcNow },
+                new() { Region = "Avista Corporation", Source = "Wind", GenerationMegawatts = 200, TimestampUtc = DateTime.UtcNow }
             };
 
             // Act
-            var result = _service.BuildDashboard(snapshot, new List<PowerData>());
+            var result = _service.BuildDashboard(snapshot, []);
 
             // Assert
             Assert.Equal("Hydro", result.TopSource);
@@ -314,7 +314,7 @@ namespace NW_GridSight.Tests.Services
             var emptySnapshot = new List<PowerData>();
 
             // Act
-            var result = _service.BuildDashboard(emptySnapshot, new List<PowerData>());
+            var result = _service.BuildDashboard(emptySnapshot, []);
 
             // Assert
             Assert.Equal("Unknown", result.TopSource);
@@ -330,12 +330,12 @@ namespace NW_GridSight.Tests.Services
             // Arrange
             var snapshot = new List<PowerData>
             {
-                new() { Region = "Test", Source = "Hydro", GenerationMegawatts = 500, TimestampUtc = DateTime.UtcNow }
+                new() { Region = "Avista Corporation", Source = "Hydro", GenerationMegawatts = 500, TimestampUtc = DateTime.UtcNow }
             };
             var historicalData = new List<PowerData>
             {
-                new() { Region = "Test", Source = "Hydro", GenerationMegawatts = 450, TimestampUtc = DateTime.UtcNow.AddHours(-1) },
-                new() { Region = "Test", Source = "Hydro", GenerationMegawatts = 400, TimestampUtc = DateTime.UtcNow.AddHours(-2) }
+                new() { Region = "Avista Corporation", Source = "Hydro", GenerationMegawatts = 450, TimestampUtc = DateTime.UtcNow.AddHours(-1) },
+                new() { Region = "Avista Corporation", Source = "Hydro", GenerationMegawatts = 400, TimestampUtc = DateTime.UtcNow.AddHours(-2) }
             };
 
             // Act
@@ -353,7 +353,7 @@ namespace NW_GridSight.Tests.Services
             // Arrange
             var snapshot = new List<PowerData>
             {
-                new() { Region = "Test", Source = "Hydro", GenerationMegawatts = 500, TimestampUtc = DateTime.UtcNow }
+                new() { Region = "Avista Corporation", Source = "Hydro", GenerationMegawatts = 500, TimestampUtc = DateTime.UtcNow }
             };
 
             // Act
@@ -374,8 +374,8 @@ namespace NW_GridSight.Tests.Services
             // Arrange - Battery storage can be negative when charging
             var snapshot = new List<PowerData>
             {
-                new() { Region = "Test", Source = "Hydro", GenerationMegawatts = 1000, TimestampUtc = DateTime.UtcNow },
-                new() { Region = "Test", Source = "Battery Storage", GenerationMegawatts = -50, TimestampUtc = DateTime.UtcNow }
+                new() { Region = "Avista Corporation", Source = "Hydro", GenerationMegawatts = 1000, TimestampUtc = DateTime.UtcNow },
+                new() { Region = "Avista Corporation", Source = "Battery Storage", GenerationMegawatts = -50, TimestampUtc = DateTime.UtcNow }
             };
 
             // Act
@@ -394,7 +394,7 @@ namespace NW_GridSight.Tests.Services
             // Arrange
             var snapshot = new List<PowerData>
             {
-                new() { Region = "Test", Source = "Hydro", GenerationMegawatts = 500, TimestampUtc = DateTime.UtcNow }
+                new() { Region = "Avista Corporation", Source = "Hydro", GenerationMegawatts = 500, TimestampUtc = DateTime.UtcNow }
             };
             var expectedTime = new DateTime(2026, 5, 5, 12, 30, 0, DateTimeKind.Utc);
             _mockClock.Setup(c => c.UtcNow).Returns(expectedTime);
@@ -405,6 +405,84 @@ namespace NW_GridSight.Tests.Services
             // Assert
             Assert.Equal(expectedTime, result.LastUpdatedUtc);
             _mockClock.Verify(c => c.UtcNow, Times.Once);
+        }
+
+        #endregion
+
+        #region Summaries Region Filtering Tests
+
+        [Fact]
+        public void BuildDashboard_Summaries_OnlyIncludePnwRegions()
+        {
+            // Arrange - Mix of PNW and non-PNW regions with same source
+            var snapshot = new List<PowerData>
+            {
+                // PNW regions
+                new() { Region = "Avista Corporation", Source = "Hydro", GenerationMegawatts = 500, TimestampUtc = DateTime.UtcNow },
+                new() { Region = "Portland General Electric Company", Source = "Hydro", GenerationMegawatts = 300, TimestampUtc = DateTime.UtcNow },
+                // Non-PNW region - should be excluded
+                new() { Region = "California ISO", Source = "Hydro", GenerationMegawatts = 1000, TimestampUtc = DateTime.UtcNow },
+                new() { Region = "Texas Grid", Source = "Wind", GenerationMegawatts = 2000, TimestampUtc = DateTime.UtcNow }
+            };
+
+            // Act
+            var result = _service.BuildDashboard(snapshot, []);
+
+            // Assert
+            var hydroSummary = result.PowerSourceSummaries.FirstOrDefault(s => s.PowerSource == "Hydro");
+
+            // Hydro should only be 800 MW (500 + 300), NOT 1800 (which would include California)
+            Assert.NotNull(hydroSummary);
+            Assert.Equal(800, hydroSummary.GenerationMegawatts);
+
+            // Wind should not appear at all (only non-PNW region has wind)
+            var windSummary = result.PowerSourceSummaries.FirstOrDefault(s => s.PowerSource == "Wind");
+            Assert.Null(windSummary);
+
+            // Total generation should only be from PNW regions
+            Assert.Equal(800, result.TotalGenerationMegawatts);
+
+            // Should only have 1 summary (Hydro), not 2
+            Assert.Single(result.PowerSourceSummaries);
+        }
+
+        [Fact]
+        public void BuildDashboard_TotalGeneration_ExcludesNonPnwRegions()
+        {
+            // Arrange
+            var snapshot = new List<PowerData>
+            {
+                new() { Region = "Avista Corporation", Source = "Hydro", GenerationMegawatts = 100, TimestampUtc = DateTime.UtcNow },
+                new() { Region = "California ISO", Source = "Solar", GenerationMegawatts = 5000, TimestampUtc = DateTime.UtcNow }
+            };
+
+            // Act
+            var result = _service.BuildDashboard(snapshot, []);
+
+            // Assert - Should only count the 100 MW from Avista, not the 5000 from California
+            Assert.Equal(100, result.TotalGenerationMegawatts);
+            Assert.Single(result.PowerSourceSummaries);
+            Assert.Equal("Hydro", result.PowerSourceSummaries[0].PowerSource);
+        }
+
+        [Fact]
+        public void BuildDashboard_Percentages_CalculatedFromPnwRegionsOnly()
+        {
+            // Arrange
+            var snapshot = new List<PowerData>
+            {
+                // PNW
+                new() { Region = "Avista Corporation", Source = "Hydro", GenerationMegawatts = 100, TimestampUtc = DateTime.UtcNow },
+                // Non-PNW - large amount that would skew percentages if included
+                new() { Region = "California ISO", Source = "Solar", GenerationMegawatts = 9900, TimestampUtc = DateTime.UtcNow }
+            };
+
+            // Act
+            var result = _service.BuildDashboard(snapshot, []);
+
+            // Assert - Hydro should be 100%, not 1% (which it would be if California was included)
+            var hydroSummary = result.PowerSourceSummaries.First(s => s.PowerSource == "Hydro");
+            Assert.Equal(100, hydroSummary.Percentage);
         }
 
         #endregion
