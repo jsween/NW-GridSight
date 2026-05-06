@@ -20,7 +20,7 @@ namespace NW_GridSight.Services
                 .Where(x => pnwRegions.Contains(x.Region))
                 .ToList();
 
-            var summaries = latestSnapshot
+            var summaries = filteredSnapshot
                 .GroupBy(x => x.Source)
                 .Select(g => new PowerSourceSummary
                 {
