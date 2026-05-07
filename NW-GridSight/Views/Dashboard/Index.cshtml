@@ -9,6 +9,20 @@
     };
 }
 
+@if (Model.HasError)
+{
+    <div class="alert alert-warning" role="alert">
+        <strong>Grid data warning:</strong> @Model.ErrorMessage
+    </div>
+}
+
+@if (Model.IsUsingCachedData)
+{
+    <span class="badge bg-warning text-dark">
+        Showing cached data
+    </span>
+}
+
 <h1>NW-GridSight Dashboard</h1>
 
 <div class="row mb-4">

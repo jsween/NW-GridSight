@@ -13,6 +13,9 @@ builder.Services.AddSingleton<IClock, SystemClock>();
 // Register DashboardService
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 
+// Cache
+builder.Services.AddMemoryCache();
+
 // Configure EiaApiOptions
 builder.Services.Configure<EiaApiOptions>(
     builder.Configuration.GetSection("EiaApi"));
