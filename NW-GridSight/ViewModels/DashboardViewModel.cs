@@ -13,5 +13,9 @@ namespace NW_GridSight.ViewModels
         public int TotalGenerationMegawatts { get; set; }
         public int HydroPercentage { get; set; }
         public string? TopSource { get; set; }
+
+        public bool HasError { get; set; }
+        public string? ErrorMessage { get; set; }
+        public bool IsUsingCachedData { get; set; }
     }
 }

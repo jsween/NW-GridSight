@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NW_GridSight.Models;
 using NW_GridSight.Services;
@@ -7,12 +9,23 @@ namespace NW_GridSight.Tests.Services
     public class DashboardServiceTests
     {
         private readonly Mock<IClock> _mockClock;
+        private readonly Mock<IEiaService> _mockEiaService;
+        private readonly Mock<IMemoryCache> _mockCache;
+        private readonly Mock<ILogger<DashboardService>> _mockLogger;
         private readonly DashboardService _service;
 
         public DashboardServiceTests()
         {
             _mockClock = new Mock<IClock>();
-            _service = new DashboardService(_mockClock.Object);
+            _mockEiaService = new Mock<IEiaService>();
+            _mockCache = new Mock<IMemoryCache>();
+            _mockLogger = new Mock<ILogger<DashboardService>>();
+
+            _service = new DashboardService(
+                _mockClock.Object,
+                _mockEiaService.Object,
+                _mockCache.Object,
+                _mockLogger.Object);
         }
 
         #region Percentage Calculation Tests
